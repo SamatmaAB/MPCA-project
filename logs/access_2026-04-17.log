@@ -1,0 +1,80 @@
+2026-04-17 00:02:33,112 - AccessControl - WARNING - Running on Windows/Mac. Using Mock GPIO for testing.
+2026-04-17 00:02:33,112 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-17 00:02:33,113 - AccessControl - INFO - No existing face database found. Starting fresh.
+2026-04-17 00:02:33,113 - AccessControl - WARNING - No users found in database! Please run `python face_database.py` first to register at least one user before starting the system.
+2026-04-17 00:02:36,028 - AccessControl - INFO - System ready. Capturing video...
+2026-04-17 00:02:47,227 - AccessControl - INFO - Termination requested by user (q key).
+2026-04-17 00:02:47,559 - AccessControl - INFO - System shutting down gracefully.
+2026-04-17 00:03:36,648 - AccessControl - WARNING - Running on Windows/Mac. Using Mock GPIO for testing.
+2026-04-17 00:03:36,649 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-17 00:03:36,649 - AccessControl - INFO - No existing face database found. Starting fresh.
+2026-04-17 00:03:36,650 - AccessControl - WARNING - No users found in database! Please run `python face_database.py` first to register at least one user before starting the system.
+2026-04-17 00:03:39,482 - AccessControl - INFO - System ready. Capturing video...
+2026-04-17 00:03:43,616 - AccessControl - INFO - [HARDWARE] Registration Button Pressed!
+2026-04-17 00:03:43,719 - AccessControl - INFO - Saved 1 faces to database.
+2026-04-17 00:03:43,719 - AccessControl - INFO - >>> NEW USER SAVED: User_1776364423 <<<
+2026-04-17 00:03:43,884 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:03:43,886 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:03:48,888 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:03:49,011 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:03:49,011 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:03:54,013 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:03:54,087 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:03:54,088 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:03:59,090 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:03:59,220 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:03:59,221 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:04:04,223 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:04:04,487 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:04:04,488 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:04:05,012 - AccessControl - INFO - Termination requested by user (q key).
+2026-04-17 00:04:05,331 - AccessControl - INFO - System shutting down gracefully.
+2026-04-17 00:07:46,963 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-17 00:07:51,919 - AccessControl - INFO - Saved 2 faces to database.
+2026-04-17 00:07:57,488 - AccessControl - WARNING - Running on Windows/Mac. Using Mock GPIO for testing.
+2026-04-17 00:07:57,488 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-17 00:07:57,490 - AccessControl - INFO - Loaded 2 faces from database.
+2026-04-17 00:08:00,305 - AccessControl - INFO - System ready. Capturing video...
+2026-04-17 00:08:01,313 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:08:01,315 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:08:06,316 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:08:06,440 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:08:06,440 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:08:11,442 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:08:11,525 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:08:11,526 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:08:14,301 - AccessControl - INFO - Termination requested by user (Ctrl+C).
+2026-04-17 00:08:14,607 - AccessControl - INFO - System shutting down gracefully.
+2026-04-17 00:08:32,122 - AccessControl - INFO - No existing face database found. Starting fresh.
+2026-04-17 00:08:38,417 - AccessControl - INFO - Saved 1 faces to database.
+2026-04-17 00:08:44,701 - AccessControl - WARNING - Running on Windows/Mac. Using Mock GPIO for testing.
+2026-04-17 00:08:44,701 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-17 00:08:44,701 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-17 00:08:47,589 - AccessControl - INFO - System ready. Capturing video...
+2026-04-17 00:08:49,185 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:08:49,187 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:08:54,189 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:08:54,318 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:08:54,319 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:08:59,321 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:08:59,794 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:08:59,795 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:09:04,797 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:09:08,196 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:09:08,196 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:09:13,199 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 00:09:13,203 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 00:09:13,204 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 00:09:13,596 - AccessControl - INFO - Termination requested by user (q key).
+2026-04-17 00:09:13,920 - AccessControl - INFO - System shutting down gracefully.
+2026-04-17 09:42:01,296 - AccessControl - WARNING - Running on Windows/Mac. Using Mock GPIO for testing.
+2026-04-17 09:42:01,298 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-17 09:42:01,302 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-17 09:42:09,151 - AccessControl - INFO - System ready. Capturing video...
+2026-04-17 09:42:10,648 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 09:42:10,650 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 09:42:15,653 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-17 09:42:15,815 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-17 09:42:15,817 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-17 09:42:19,911 - AccessControl - INFO - Termination requested by user (q key).
+2026-04-17 09:42:20,289 - AccessControl - INFO - System shutting down gracefully.

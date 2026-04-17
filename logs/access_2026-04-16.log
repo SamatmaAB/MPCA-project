@@ -1,0 +1,79 @@
+2026-04-16 23:40:49,057 - AccessControl - INFO - No existing face database found. Starting fresh.
+2026-04-16 23:44:46,865 - AccessControl - INFO - No existing face database found. Starting fresh.
+2026-04-16 23:44:58,748 - AccessControl - INFO - Saved 1 faces to database.
+2026-04-16 23:45:58,823 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-16 23:45:58,824 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-16 23:46:14,079 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-16 23:46:14,080 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-16 23:53:44,754 - AccessControl - WARNING - Running on Windows/Mac. Using Mock GPIO for testing.
+2026-04-16 23:53:44,756 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-16 23:53:44,756 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-16 23:53:47,727 - AccessControl - INFO - System ready. Capturing video...
+2026-04-16 23:53:48,865 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:53:48,868 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:53:53,870 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:53:53,933 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:53:53,934 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:53:58,936 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:53:59,135 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:53:59,137 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:54:04,138 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:54:04,271 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:54:04,273 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:54:09,276 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:54:09,555 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:54:09,557 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:54:12,665 - AccessControl - INFO - Termination requested by user (Ctrl+C).
+2026-04-16 23:54:12,948 - AccessControl - INFO - System shutting down gracefully.
+2026-04-16 23:55:40,190 - AccessControl - WARNING - Running on Windows/Mac. Using Mock GPIO for testing.
+2026-04-16 23:55:40,191 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-16 23:55:40,191 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-16 23:55:43,161 - AccessControl - INFO - System ready. Capturing video...
+2026-04-16 23:55:44,293 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:55:44,294 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:55:49,296 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:55:50,359 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:55:50,359 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:55:55,364 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:55:59,892 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:55:59,894 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:56:04,895 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:56:05,765 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:56:05,767 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:56:08,988 - AccessControl - INFO - Termination requested by user (Ctrl+C).
+2026-04-16 23:56:09,302 - AccessControl - INFO - System shutting down gracefully.
+2026-04-16 23:58:54,119 - AccessControl - WARNING - Running on Windows/Mac. Using Mock GPIO for testing.
+2026-04-16 23:58:54,120 - AccessControl - INFO - Starting Face Recognition Access Control System...
+2026-04-16 23:58:54,121 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-16 23:58:56,932 - AccessControl - INFO - System ready. Capturing video...
+2026-04-16 23:58:57,939 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:58:57,939 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:58:58,797 - AccessControl - INFO - [HARDWARE] Registration Button Pressed!
+2026-04-16 23:58:58,821 - AccessControl - INFO - Saved 2 faces to database.
+2026-04-16 23:58:58,821 - AccessControl - INFO - >>> NEW USER SAVED: User_1776364138 <<<
+2026-04-16 23:59:01,663 - AccessControl - INFO - [HARDWARE] Registration Button Pressed!
+2026-04-16 23:59:01,685 - AccessControl - INFO - Saved 3 faces to database.
+2026-04-16 23:59:01,685 - AccessControl - INFO - >>> NEW USER SAVED: User_1776364141 <<<
+2026-04-16 23:59:02,942 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:59:03,069 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:59:03,071 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:59:06,123 - AccessControl - INFO - [HARDWARE] Registration Button Pressed!
+2026-04-16 23:59:06,149 - AccessControl - INFO - Saved 4 faces to database.
+2026-04-16 23:59:06,149 - AccessControl - INFO - >>> NEW USER SAVED: User_1776364146 <<<
+2026-04-16 23:59:07,931 - AccessControl - INFO - [HARDWARE] Registration Button Pressed!
+2026-04-16 23:59:07,953 - AccessControl - INFO - Saved 5 faces to database.
+2026-04-16 23:59:07,953 - AccessControl - INFO - >>> NEW USER SAVED: User_1776364147 <<<
+2026-04-16 23:59:08,072 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:59:08,129 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:59:08,130 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:59:09,662 - AccessControl - INFO - [HARDWARE] Registration Button Pressed!
+2026-04-16 23:59:09,688 - AccessControl - INFO - Saved 6 faces to database.
+2026-04-16 23:59:09,688 - AccessControl - INFO - >>> NEW USER SAVED: User_1776364149 <<<
+2026-04-16 23:59:13,131 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:59:13,262 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:59:13,263 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:59:18,265 - AccessControl - INFO - [UNLOCK_RELAY] Cooldown completed. Ready.
+2026-04-16 23:59:18,365 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-16 23:59:18,366 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-16 23:59:18,759 - AccessControl - INFO - Termination requested by user (Ctrl+C).
+2026-04-16 23:59:19,050 - AccessControl - INFO - System shutting down gracefully.
