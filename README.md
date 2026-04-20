@@ -1,7 +1,8 @@
-# Samatma ISFCR: Centralised Access Control & Dashboard
+# 
+Centralised Access Control & Dashboard
 
 ## High-Level Overview
-The Samatma ISFCR project is a scalable, distributed smart-lock and multi-camera ecosystem. The core architecture uses a unified **Server (Raspberry Pi)** and multiple lightweight **Nodes** streaming visual data via HTTP API.
+This project is a scalable, distributed smart-lock and multi-camera ecosystem. The core architecture uses a unified **Server (Raspberry Pi)** and multiple lightweight **Nodes** streaming visual data via HTTP API.
 
 At its core, a central Flask-based web engine runs an asynchronous AI thread. This thread controls CPU usage by entering deep sleep and wakes up using environmental cues—either dynamically triggered by an **Infrared Obstacle/Motion Sensor**, or through an automated 30-second passive check-in sweep. When woken up, the system inspects all camera nodes. By capturing patterns and executing facial recognition models temporally across consecutive frames, it controls electronic relays on the Raspberry Pi to authenticate recognized faces or sounds a buzzer alarm for intruders.
 
