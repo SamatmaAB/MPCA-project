@@ -1,189 +1,261 @@
-import cv2
+import os
 import time
+import threading
+import cv2
+import numpy as np
+from flask import Flask, render_template, request, session, redirect, url_for, Response, jsonify
 from utils import logger
 from recognition import FaceRecognizer
-from gpio_control import AccessController, RegistrationButton
-from face_database import get_face_encoding
+from gpio_control import AccessController, EnvironmentSensors
 
-# --- Configuration ---
-# Optimization: Resize frame to 1/SCALE_FACTOR before processing
-SCALE_FACTOR = 4 
-# Optimization: Skip frames to save CPU load
-PROCESS_EVERY_N_FRAMES = 3 
+app = Flask(__name__)
+# Secure secret key for admin session (could be env var in production)
+app.secret_key = "samatma_isfcr_admin_secret"
 
-# Temporal Stability Config
-CONSECUTIVE_FRAMES_REQUIRED = 3 
+# Initialize Hardware and Recognition
+recognizer = FaceRecognizer(tolerance=0.88) # Tighter threshold to prevent multiple false identifications
+access_controller = AccessController()
+# Default IR pin to 18, and alarm threshold to 45C
+env_sensors = EnvironmentSensors(ir_pin=18, temp_threshold=45.0)
 
-def main():
-    logger.info("Starting Face Recognition Access Control System...")
+# Global State Management
+GLOBAL_AWAKE_UNTIL = 0
+last_poll_time = time.time()
+
+# Store frames and state for each active network camera
+# Structure: { cam_id: {'frame': bytes, 'unrec_start': float, 'recent_rec': [bool], 'boxes': []} }
+cameras = {}
+events = []
+
+def log_ui_event(msg):
+    event = f"[{time.strftime('%H:%M:%S')}] {msg}"
+    events.insert(0, event)
+    # Keep last 50 events to prevent memory bloat
+    if len(events) > 50:
+        events.pop()
+    logger.info(msg)
+
+def background_processing_loop():
+    """
+    Background worker thread. Runs infinitely.
+    Polls the sensors, manages deep sleep to save CPU, and processes uploaded camera frames.
+    """
+    global GLOBAL_AWAKE_UNTIL, last_poll_time
     
-    # Initialize components
-    recognizer = FaceRecognizer(tolerance=0.75)
-    access_controller = AccessController()
-    
-    # Registration Button Setup
-    registration_requested = False
-    def on_reg_pressed():
-        nonlocal registration_requested
-        registration_requested = True
-        logger.info("[HARDWARE] Registration Button Pressed!")
-
-    reg_button = RegistrationButton(pin=22, callback=on_reg_pressed)
-    
-    # Check if there are any users in the DB
+    # Ensures database has at least 1 user before processing to prevent blind runtime
     if not recognizer.db.names:
-        logger.warning(
-            "No users found in database! Please run `python face_database.py` first "
-            "to register at least one user before starting the system."
-        )
+        log_ui_event("WARNING: No users in face database. Access will never unlock.")
 
-    # Try to open webcam
-    video_capture = cv2.VideoCapture(0)
-    if not video_capture.isOpened():
-        logger.error("Failed to open webcam. Please check the connection.")
-        return
+    while True:
+        time.sleep(0.1) # Small sleep to prevent CPU hogging
+        current_time = time.time()
         
-    # We optionally lower resolution at hardware level if possible
-    # video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    # video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-
-    frame_count = 0
-    
-    # Temporal buffer
-    # True = Authorized face seen, False = Unrecognized face seen
-    recent_recognitions = []
-    
-    # Cached results to draw bounding boxes accurately during skipped frames
-    cached_face_results = []
-    
-    # Timer for Intruder alarm (2.5 continuous seconds)
-    unrecognized_face_start_time = None
-
-    logger.info("System ready. Capturing video...")
-
-    try:
-        while True:
-            # 1. Capture frame
-            ret, frame = video_capture.read()
-            if not ret:
-                logger.error("Failed to grab frame. Camera disconnected?")
-                break
-                
-            frame_count += 1
+        # 1. Temperature Warning Check
+        if int(current_time) % 5 == 0:
+            if env_sensors.check_temp_alarm(access_controller):
+                # Will trigger Buzzer automatically via the class method
+                log_ui_event(f"TEMP ALARM! Exceeded safe limit ({env_sensors.get_temperature():.1f}C)")
+        
+        # 2. Check Physical IR Sensor (Primary Wake Trigger)
+        if env_sensors.is_ir_triggered():
+            if current_time >= GLOBAL_AWAKE_UNTIL:
+                log_ui_event("IR Sensor detected motion! Waking up for 30s.")
+            GLOBAL_AWAKE_UNTIL = current_time + 30
             
-            # Flip frame horizontally for easier viewing (mirror effect)
-            frame = cv2.flip(frame, 1)
-
-            # --- Hardware Registration Logic ---
-            if registration_requested:
-                registration_requested = False
-                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                locs, encodings = get_face_encoding(rgb_frame)
-                
-                if locs == "multiple":
-                    logger.warning("[REGISTRATION] Failed: Multiple faces seen.")
-                elif not locs or len(encodings) == 0:
-                    logger.warning("[REGISTRATION] Failed: No face detected.")
-                else:
-                    new_name = f"User_{int(time.time())}"
-                    recognizer.db.add_user(new_name, encodings[0])
-                    logger.info(f">>> NEW USER SAVED: {new_name} <<<")
-                    
-                    # Optionally Buzz lightly to indicate success
-                    if access_controller.buzzer:
-                        import threading
-                        threading.Thread(target=access_controller._trigger_device, args=(access_controller.buzzer, 0.2, "SUCCESS_BUZZ"), daemon=True).start()
-
-            # 2. Performance Optimization: Only process every N frames
-            if frame_count % PROCESS_EVERY_N_FRAMES == 0:
-                
-                # Resize frame for faster face detection
-                small_frame = cv2.resize(frame, (0, 0), fx=(1/SCALE_FACTOR), fy=(1/SCALE_FACTOR))
-                rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
-                
-                # 3. Detect and Recognize
-                # Returns: [(face_location, name, is_authorized), ...]
-                cached_face_results = recognizer.check_faces(rgb_small_frame)
-                
-                # 4. Decision Logic
-                if len(cached_face_results) > 0:
-                    # Check if ANY of the detected faces are authorized
-                    frame_authorized = any([is_auth for (_, _, is_auth) in cached_face_results])
-                    
-                    if frame_authorized:
-                        unrecognized_face_start_time = None # Reset intruder timer
-                        recent_recognitions.append(True)
-                    else:
-                        recent_recognitions.append(False)
-                        logger.debug("Unknown face(s) detected.")
-                        # Start timer if not already started
-                        if unrecognized_face_start_time is None:
-                            unrecognized_face_start_time = time.time()
-                else:
-                    # No faces detected. Reset intruder timer.
-                    unrecognized_face_start_time = None
-                    pass
-                    
-                # Ensure buffer doesn't grow indefinitely
-                if len(recent_recognitions) > CONSECUTIVE_FRAMES_REQUIRED:
-                    recent_recognitions.pop(0)
-                    
-                # 5. Evaluate Temporal Buffer explicitly (Quick Unlock)
-                if len(recent_recognitions) == CONSECUTIVE_FRAMES_REQUIRED:
-                    # If all recent frames match an authorized user == APPROVE
-                    if all(recent_recognitions):
-                        access_controller.approve_access()
-                        # Reset buffer after decision
-                        recent_recognitions.clear()
-                
-                # 6. Evaluate Time-based Intruder Alarm (2.5 continuous seconds)
-                if unrecognized_face_start_time is not None:
-                    if time.time() - unrecognized_face_start_time >= 2.5:
-                        access_controller.reject_access()
-                        # Reset timer and buffer after triggering alarm
-                        unrecognized_face_start_time = None
-                        recent_recognitions.clear()
+        # 3. Determine if system should process frames based on Wake states
+        is_awake = current_time < GLOBAL_AWAKE_UNTIL
+        should_poll = False
+        
+        if not is_awake and (current_time - last_poll_time) >= 30:
+            should_poll = True
+            last_poll_time = current_time
+            log_ui_event("30s Poll trigger: Checking all active webcams for faces...")
             
-            # --- Draw results on screen (Demo purposes) ---
-            # Even if we skip processing the current frame, we draw the cached boxes
-            for (top, right, bottom, left), name, is_auth in cached_face_results:
-                # Scale back up face locations since the frame we detected in was scaled down
-                top *= SCALE_FACTOR
-                right *= SCALE_FACTOR
-                bottom *= SCALE_FACTOR
-                left *= SCALE_FACTOR
-
-                color = (0, 255, 0) if is_auth else (0, 0, 255)
+        # If neither IR actively tripped nor our 30-sec poll triggered, skip processing completely
+        if not is_awake and not should_poll:
+            continue
+            
+        # 4. Heavy Lifting: Process 1 frame from EACH connected camera node
+        faces_detected_in_poll = False
+        
+        for cam_id, cam_data in list(cameras.items()):
+            frame_bytes = cam_data.get('frame')
+            if not frame_bytes: continue
+            
+            # Decode the network byte feed into an OpenCV format array
+            arr = np.frombuffer(frame_bytes, dtype=np.uint8)
+            frame = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+            if frame is None: continue
+            
+            # Compress to speed up face recognition matching
+            small_frame = cv2.resize(frame, (0, 0), fx=(1/4), fy=(1/4))
+            rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
+            
+            results = recognizer.check_faces(rgb_small_frame)
+            
+            if len(results) > 0:
+                faces_detected_in_poll = True
+                frame_auth = any([auth for (_, _, auth) in results])
                 
-                cv2.rectangle(frame, (left, top), (right, bottom), color, 2)
-                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), color, cv2.FILLED)
-                cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+                # Check for an authorized face
+                if frame_auth:
+                    cam_data['unrec_start'] = None
+                    cam_data['recent_rec'].append(True)
+                else:
+                    # Treat as unidentified presence
+                    cam_data['recent_rec'].append(False)
+                    if cam_data.get('unrec_start') is None:
+                        cam_data['unrec_start'] = current_time
+            else:
+                cam_data['unrec_start'] = None
                 
-            # Render cooling down UI state
-            if access_controller.is_cooling_down:
-                cv2.putText(frame, "COOLDOWN ACTIVE", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 165, 255), 2)
+            # Buffer constraint to avoid running out of memory bounds
+            req_frames = 3
+            rec = cam_data['recent_rec']
+            if len(rec) > req_frames:
+                rec.pop(0)
+                
+            # 5. Access Evaluators (Per Camera Basis)
+            
+            # Approval
+            if len(rec) == req_frames and all(rec):
+                log_ui_event(f"[{cam_id}] ACCESS APPROVED. Unlocking!")
+                access_controller.approve_access()
+                rec.clear() # Reset consecutive counter after approval
+                
+            # Rejection (Unrecognized Intruder Timer)
+            if cam_data['unrec_start'] and current_time - cam_data['unrec_start'] >= 2.5:
+                log_ui_event(f"[{cam_id}] INTRUDER ALARM triggered!")
+                access_controller.reject_access()
+                cam_data['unrec_start'] = None
+                rec.clear()
+                
+            # Cache the physical boxes for the web stream renderer
+            cam_data['boxes'] = results
+            cam_data['processed_time'] = current_time
+            
+        # If the passive 30-sec poll discovered a face anywhere, we stay awake for the next 30s continuously
+        if should_poll and faces_detected_in_poll:
+            log_ui_event("Face found during passive poll! System waking up for 30s.")
+            GLOBAL_AWAKE_UNTIL = current_time + 30
 
-            # Show the resulting image
-            cv2.imshow('Antitheft Security Monitor', frame)
+def generate_video_feed(cam_id):
+    """
+    Generator function designed for HTTP chunked Response streaming.
+    Takes the latest raw byte frame uploaded, injects the colored boxes visually, and yields.
+    """
+    while True:
+        cam_data = cameras.get(cam_id)
+        if not cam_data or not cam_data.get('frame'):
+            time.sleep(0.5)
+            continue
+            
+        frame_bytes = cam_data['frame']
+        
+        # Start drawing the bounding boxes (if any) onto the stream image
+        arr = np.frombuffer(frame_bytes, np.uint8)
+        img = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+        
+        boxes = cam_data.get('boxes', [])
+        for (top, right, bottom, left), name, is_auth in boxes:
+            t, r, b, l = top*4, right*4, bottom*4, left*4
+            color = (0, 255, 0) if is_auth else (0, 0, 255)
+            
+            # Draw Main Wrapper Box
+            cv2.rectangle(img, (l, t), (r, b), color, 2)
+            # Draw Filled Text Container
+            cv2.rectangle(img, (l, b - 30), (r, b), color, cv2.FILLED)
+            cv2.putText(img, name, (l + 5, b - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+            
+        # Draw status text overlaid on the image
+        current_time = time.time()
+        is_awake = current_time < GLOBAL_AWAKE_UNTIL
+        status = "AWAKE" if is_awake else "SLEEPING (POLL MODE)"
+        cv2.putText(img, f"State: {status}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,0), 2)
+        
+        # Transcode back to jpg sequence component
+        ret, jpeg = cv2.imencode('.jpg', img, [int(cv2.IMWRITE_JPEG_QUALITY), 65])
+        frame_out = jpeg.tobytes()
+        
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_out + b'\r\n')
+        
+        # Output rate limited to prevent network exhaustion
+        time.sleep(0.1) 
 
-            # Hit 'q' on the keyboard to quit!
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord('q'):
-                logger.info("Termination requested by user (q key).")
-                break
-            # Hit 'r' on keyboard to simulate physical registration button 
-            elif key == ord('r'):
-                reg_button.trigger_mock()
 
-    except KeyboardInterrupt:
-        logger.info("Termination requested by user (Ctrl+C).")
-    except Exception as e:
-        logger.exception("Unexpected error in main loop")
-    finally:
-        # Release handle to the webcam
-        video_capture.release()
-        cv2.destroyAllWindows()
-        logger.info("System shutting down gracefully.")
+# ==================================
+# FLASK WEB SERVER ROUTES
+# ==================================
 
-if __name__ == '__main__':
-    main()
+@app.route("/", methods=["GET", "POST"])
+def login():
+    """Secure Portal entry point."""
+    if request.method == "POST":
+        if request.form.get("username") == "admin" and request.form.get("password") == "samatma_isfcr_head":
+            session["logged_in"] = True
+            log_ui_event("Admin logged into dashboard.")
+            return redirect(url_for("dashboard"))
+        return render_template("login.html", error="Invalid credentials")
+        
+    # Skip login immediately if authenticated
+    if session.get("logged_in"):
+        return redirect(url_for("dashboard"))
+        
+    return render_template("login.html")
+
+@app.route("/dashboard")
+def dashboard():
+    """The central control panel."""
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
+    return render_template("index.html", cameras=cameras.keys(), events=events)
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+@app.route("/api/upload/<cam_id>", methods=["POST"])
+def api_upload(cam_id):
+    """
+    Node Reception Endpoint.
+    Remote machines (like a secondary laptop capturing webcam) 
+    send a POST containing a JPEG byte string here to be ingested by the background Pi processor.
+    """
+    if 'frame' not in request.files:
+        return jsonify({"error": "No frame part provided."}), 400
+        
+    # Dynamically register the camera node
+    if cam_id not in cameras:
+        cameras[cam_id] = {'recent_rec': [], 'unrec_start': None, 'boxes': [], 'frame': None}
+        log_ui_event(f"New camera node successfully registered: {cam_id}")
+        
+    cameras[cam_id]['frame'] = request.files['frame'].read()
+    return jsonify({"status": "received"})
+
+@app.route("/video_feed/<cam_id>")
+def video_feed(cam_id):
+    """The stream endpoint sourced by the img dom blocks"""
+    if not session.get("logged_in"): return "Unauthorized", 401
+    return Response(generate_video_feed(cam_id), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route("/api/events")
+def api_events():
+    """Data endpoint to refresh the Web UI autonomously"""
+    if not session.get("logged_in"): return "Unauthorized", 401
+    return jsonify({
+        "events": events, 
+        "temp": env_sensors.get_temperature(), 
+        'awake': time.time() < GLOBAL_AWAKE_UNTIL
+    })
+    
+if __name__ == "__main__":
+    # Ignite the AI orchestrator async thread to preserve the web loop
+    t = threading.Thread(target=background_processing_loop, daemon=True)
+    t.start()
+    
+    logger.info("Initializing Flask Multi-Camera Node Stream Server.")
+    
+    # Host 0.0.0.0 will naturally bridge Tailscale IPs (100.x.x.x) alongside wlan0/eth0 IPs.
+    app.run(host="0.0.0.0", port=5000, threaded=True)

@@ -78,3 +78,5 @@
 2026-04-17 09:42:15,817 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
 2026-04-17 09:42:19,911 - AccessControl - INFO - Termination requested by user (q key).
 2026-04-17 09:42:20,289 - AccessControl - INFO - System shutting down gracefully.
+2026-04-17 05:42:34,731 - AccessControl - INFO - Starting Face Recognition System (Mode: local)...
+2026-04-17 05:42:34,733 - AccessControl - INFO - Loaded 1 faces from database.

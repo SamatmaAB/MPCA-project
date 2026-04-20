@@ -1,0 +1,98 @@
+2026-04-20 04:32:02,396 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-20 04:32:02,408 - AccessControl - WARNING - Could not load physical GPIOs (Mocking instead): Unable to load any default pin factory!
+2026-04-20 04:32:02,410 - AccessControl - ERROR - Failed to load IR sensor: Unable to load any default pin factory!
+2026-04-20 04:32:02,424 - AccessControl - ERROR - Failed to load DHT11 sensor (ensure adafruit-circuitpython-dht is installed): No module named 'lgpio'
+2026-04-20 04:32:02,426 - AccessControl - INFO - Initializing Flask Multi-Camera Node Stream Server.
+2026-04-20 04:32:32,451 - AccessControl - INFO - 30s Poll trigger: Checking all active webcams for faces...
+2026-04-20 04:32:53,969 - AccessControl - INFO - Admin logged into dashboard.
+2026-04-20 04:33:02,475 - AccessControl - INFO - 30s Poll trigger: Checking all active webcams for faces...
+2026-04-20 04:34:36,219 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-20 04:34:36,223 - AccessControl - WARNING - Could not load physical GPIOs (Mocking instead): Unable to load any default pin factory!
+2026-04-20 04:34:36,225 - AccessControl - ERROR - Failed to load IR sensor: Unable to load any default pin factory!
+2026-04-20 04:34:36,232 - AccessControl - ERROR - Failed to load DHT11 sensor (ensure adafruit-circuitpython-dht is installed): No module named 'lgpio'
+2026-04-20 04:34:36,235 - AccessControl - INFO - Initializing Flask Multi-Camera Node Stream Server.
+2026-04-20 04:34:36,335 - AccessControl - INFO - IR Sensor detected motion! Waking up for 30s.
+2026-04-20 04:35:14,974 - AccessControl - INFO - New camera node successfully registered: node_01
+2026-04-20 04:35:16,545 - AccessControl - INFO - [node_01] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:16,545 - AccessControl - INFO - >>> ACCESS APPROVED <<<
+2026-04-20 04:35:16,546 - AccessControl - INFO - [HARDWARE] Activating UNLOCK_RELAY for 2.0s
+2026-04-20 04:35:17,296 - AccessControl - INFO - [node_01] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:17,729 - AccessControl - INFO - [node_01] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:18,054 - AccessControl - INFO - [node_01] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:20,308 - AccessControl - INFO - [node_01] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:22,127 - AccessControl - INFO - [node_01] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:22,547 - AccessControl - INFO - [node_01] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:22,861 - AccessControl - INFO - [node_01] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:27,060 - AccessControl - INFO - [node_01] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:36,914 - AccessControl - INFO - New camera node successfully registered: Node1
+2026-04-20 04:35:42,431 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:42,899 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:43,786 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:44,664 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:45,112 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:45,663 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:45,993 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:46,323 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:46,655 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:46,988 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:47,325 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:47,656 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:47,992 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:48,570 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:48,923 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:49,268 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:49,601 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:49,933 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:50,267 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:50,600 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:50,935 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:51,270 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:51,604 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:51,937 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:52,271 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:52,603 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:52,937 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:53,271 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:53,604 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:53,937 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:35:54,271 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:06,705 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:07,388 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:07,841 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:08,607 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:08,936 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:09,265 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:09,596 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:10,143 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:10,473 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:10,801 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:36:11,129 - AccessControl - INFO - [Node1] ACCESS APPROVED. Unlocking!
+2026-04-20 04:50:47,773 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-20 04:50:47,777 - AccessControl - WARNING - Could not load physical GPIOs (Mocking instead): Unable to load any default pin factory!
+2026-04-20 04:50:47,779 - AccessControl - ERROR - Failed to load IR sensor: Unable to load any default pin factory!
+2026-04-20 04:50:47,786 - AccessControl - ERROR - Failed to load DHT11 sensor (ensure adafruit-circuitpython-dht is installed): No module named 'lgpio'
+2026-04-20 04:50:47,790 - AccessControl - INFO - Initializing Flask Multi-Camera Node Stream Server.
+2026-04-20 04:50:47,890 - AccessControl - INFO - IR Sensor detected motion! Waking up for 30s.
+2026-04-20 04:59:41,646 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-20 05:01:35,990 - AccessControl - INFO - Loaded 1 faces from database.
+2026-04-20 05:01:35,994 - AccessControl - WARNING - Could not load physical GPIOs (Mocking instead): Unable to load any default pin factory!
+2026-04-20 05:01:35,996 - AccessControl - ERROR - Failed to load IR sensor: Unable to load any default pin factory!
+2026-04-20 05:01:36,002 - AccessControl - ERROR - Failed to load DHT11 sensor (ensure adafruit-circuitpython-dht is installed): No module named 'lgpio'
+2026-04-20 05:01:36,005 - AccessControl - INFO - Initializing Flask Multi-Camera Node Stream Server.
+2026-04-20 05:01:36,105 - AccessControl - INFO - IR Sensor detected motion! Waking up for 30s.
+2026-04-20 05:02:24,014 - AccessControl - INFO - New camera node successfully registered: Node1
+2026-04-20 05:02:30,470 - AccessControl - INFO - [Node1] INTRUDER ALARM triggered!
+2026-04-20 05:02:30,471 - AccessControl - WARNING - !!! ACCESS REJECTED (INTRUDER) !!!
+2026-04-20 05:02:30,471 - AccessControl - INFO - [HARDWARE] Activating Pulsing ALARM_BUZZER for 2.0s
+2026-04-20 05:02:33,096 - AccessControl - INFO - [Node1] INTRUDER ALARM triggered!
+2026-04-20 05:02:35,471 - AccessControl - INFO - [ALARM_BUZZER] Cooldown completed. Ready.
+2026-04-20 05:02:35,787 - AccessControl - INFO - [Node1] INTRUDER ALARM triggered!
+2026-04-20 05:02:35,788 - AccessControl - WARNING - !!! ACCESS REJECTED (INTRUDER) !!!
+2026-04-20 05:02:35,788 - AccessControl - INFO - [HARDWARE] Activating Pulsing ALARM_BUZZER for 2.0s
+2026-04-20 05:02:38,467 - AccessControl - INFO - [Node1] INTRUDER ALARM triggered!
+2026-04-20 05:02:40,788 - AccessControl - INFO - [ALARM_BUZZER] Cooldown completed. Ready.
+2026-04-20 05:02:41,095 - AccessControl - INFO - [Node1] INTRUDER ALARM triggered!
+2026-04-20 05:02:41,095 - AccessControl - WARNING - !!! ACCESS REJECTED (INTRUDER) !!!
+2026-04-20 05:02:41,096 - AccessControl - INFO - [HARDWARE] Activating Pulsing ALARM_BUZZER for 2.0s
+2026-04-20 05:02:43,726 - AccessControl - INFO - [Node1] INTRUDER ALARM triggered!
+2026-04-20 05:02:46,096 - AccessControl - INFO - [ALARM_BUZZER] Cooldown completed. Ready.

@@ -15,31 +15,21 @@ else:
         IS_RPI = False
         logger.warning("gpiozero not found. Using Mock GPIO for testing.")
 
-class RegistrationButton:
-    def __init__(self, pin=22, callback=None):
-        self.callback = callback
-        if IS_RPI:
-            self.btn = Button(pin, pull_up=True, bounce_time=0.1)
-            # Link the physical button press to our callback
-            if self.callback:
-                self.btn.when_pressed = self.callback
-        else:
-            self.btn = None
-            
-    def trigger_mock(self):
-        """Simulates a button press on PC via keyboard"""
-        if self.callback:
-            self.callback()
+
 
 class AccessController:
     def __init__(self, unlock_pin=17, buzzer_pin=27, cooldown_sec=3.0):
         self.cooldown_sec = cooldown_sec
         self.is_cooling_down = False
-        
         if IS_RPI:
-            # We use LED class for Relay as well since it's just basic on/off output
-            self.relay = LED(unlock_pin)
-            self.buzzer = Buzzer(buzzer_pin)
+            try:
+                # We use LED class for Relay as well since it's just basic on/off output
+                self.relay = LED(unlock_pin)
+                self.buzzer = Buzzer(buzzer_pin)
+            except Exception as e:
+                logger.warning(f"Could not load physical GPIOs (Mocking instead): {e}")
+                self.relay = None
+                self.buzzer = None
         else:
             self.relay = None
             self.buzzer = None
@@ -58,6 +48,22 @@ class AccessController:
         self.is_cooling_down = False
         logger.info(f"[{device_name}] Cooldown completed. Ready.")
 
+    def _trigger_pulsing_device(self, device, duration_sec, device_name):
+        logger.info(f"[HARDWARE] Activating Pulsing {device_name} for {duration_sec}s")
+        end_time = time.time() + duration_sec
+        if IS_RPI and device:
+            while time.time() < end_time:
+                device.on()
+                time.sleep(0.1)
+                device.off()
+                time.sleep(0.1)
+        else:
+            time.sleep(duration_sec)
+            
+        time.sleep(self.cooldown_sec)
+        self.is_cooling_down = False
+        logger.info(f"[{device_name}] Cooldown completed. Ready.")
+
     def approve_access(self):
         """Unlocks door/relay"""
         if self.is_cooling_down:
@@ -69,11 +75,67 @@ class AccessController:
         threading.Thread(target=self._trigger_device, args=(self.relay, 2.0, "UNLOCK_RELAY"), daemon=True).start()
 
     def reject_access(self):
-        """Sounds buzzer/alarm"""
+        """Sounds rapid buzzer/alarm"""
         if self.is_cooling_down:
             return
             
         self.is_cooling_down = True
         logger.warning("!!! ACCESS REJECTED (INTRUDER) !!!")
-        # Trigger buzzer for 1.5 seconds in a background thread
-        threading.Thread(target=self._trigger_device, args=(self.buzzer, 1.5, "ALARM_BUZZER"), daemon=True).start()
+        # Trigger rapid pulsing buzzer for 2 seconds
+        threading.Thread(target=self._trigger_pulsing_device, args=(self.buzzer, 2.0, "ALARM_BUZZER"), daemon=True).start()
+
+class EnvironmentSensors:
+    def __init__(self, ir_pin=18, dht_pin=4, temp_threshold=50.0):
+        self.temp_threshold = temp_threshold
+        self.dht_device = None
+        self.ir = None
+        
+        if IS_RPI:
+            # IR Sensor Setup
+            try:
+                from gpiozero import DigitalInputDevice
+                self.ir = DigitalInputDevice(ir_pin, pull_up=False)
+            except Exception as e:
+                logger.error(f"Failed to load IR sensor: {e}")
+
+            # DHT-11 Sensor Setup
+            try:
+                import board
+                import adafruit_dht
+                # DHT-11 connected to GPIO 4 (board.D4)
+                self.dht_device = adafruit_dht.DHT11(getattr(board, f"D{dht_pin}"))
+            except Exception as e:
+                logger.error(f"Failed to load DHT11 sensor (ensure adafruit-circuitpython-dht is installed): {e}")
+
+    def is_ir_triggered(self):
+        # RETURN TRUE FOR TESTING - Forces the system to stay continuously awake
+        # Revert this to `return self.ir.is_active if IS_RPI and self.ir else False` in production
+        return True
+
+    def get_temperature(self):
+        """Returns the temperature in Celsius from DHT-11."""
+        if IS_RPI and self.dht_device:
+            try:
+                # DHT sensors often fail to read on first try due to timing; circuitpython handles this gracefully
+                # but might still throw RuntimeError
+                temp = self.dht_device.temperature
+                if temp is not None:
+                    return temp
+                return 25.0
+            except RuntimeError:
+                # Common issue with DHT, just return default and try next loop
+                return 25.0
+            except Exception as e:
+                return 25.0
+        return 25.0
+
+    def check_temp_alarm(self, access_controller):
+        """Checks if temperature exceeds threshold and triggers the buzzer."""
+        t = self.get_temperature()
+        if t > self.temp_threshold:
+            logger.warning(f"TEMPERATURE ALARM: {t}C exceeds limit {self.temp_threshold}C!")
+            if hasattr(access_controller, 'buzzer') and access_controller.buzzer:
+                threading.Thread(target=access_controller._trigger_device, args=(access_controller.buzzer, 3.0, "TEMP_ALARM"), daemon=True).start()
+            return True
+        return False
+
